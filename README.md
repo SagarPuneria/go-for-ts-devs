@@ -145,6 +145,50 @@ cd <folder-name>
 npx ts-node <filename>.ts
 ```
 
+### Alternative Ways to Run TypeScript Files
+
+There are multiple approaches to execute TypeScript code depending on your needs:
+
+**1. Using ts-node (Recommended for quick testing)**
+```bash
+npx ts-node <filename>.ts
+```
+- Compiles and runs TypeScript directly without creating .js files
+- Best for development and testing
+- Requires a `tsconfig.json` file (included in this repository)
+
+**2. Compile then run with Node.js**
+```bash
+npx tsc <filename>.ts
+node <filename>.js
+```
+- Two-step process: compile TypeScript to JavaScript, then run with Node.js
+- Useful for inspecting the generated JavaScript code
+- Generated .js files can be committed or deployed
+
+**3. Install TypeScript globally (One-time setup)**
+```bash
+npm install -g typescript ts-node
+
+# Then run directly without npx
+tsc <filename>.ts
+node <filename>.js
+
+# Or use ts-node
+ts-node <filename>.ts
+```
+- Faster execution after initial global installation
+- No need to prefix commands with `npx`
+- Recommended if you work with TypeScript frequently
+
+**4. Compile all TypeScript files at once**
+```bash
+npx tsc
+```
+- Compiles all TypeScript files based on `tsconfig.json` settings
+- Output goes to the configured `outDir` directory
+- Useful for building the entire project
+
 ### Exploring the Repository
 
 1. Start with fundamental concepts: `variables/`, `functions/`, and `conditionals/`
