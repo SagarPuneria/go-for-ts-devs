@@ -34,7 +34,7 @@ import {
       <div class="logs">
         <h3>Lifecycle Hook Logs:</h3>
         <ul>
-          <li *ngFor="let log of logs">{{ log }}</li>
+          <li *ngFor="let log of logs; let i = index">{{ i + 1 }}. {{ log }}</li>
         </ul>
       </div>
     </div>
@@ -120,84 +120,84 @@ export class LifecycleComponent implements
   private viewCheckCount: number = 0;
 
   constructor() {
-    this.addLog('Constructor: Component instance created');
+    this.addLog('#1. Constructor: Component instance created');
   }
 
-  // 1. ngOnChanges - Called when input properties change
+  // 2. ngOnChanges - Called when input properties change
   ngOnChanges(changes: SimpleChanges): void {
-    this.addLog('ngOnChanges: Input properties changed');
+    this.addLog('#2. ngOnChanges: Input properties changed');
     
     for (const propName in changes) {
       const change = changes[propName];
       const current = JSON.stringify(change.currentValue);
       const previous = JSON.stringify(change.previousValue);
       
-      this.addLog(`  - ${propName}: ${previous} → ${current}`);
+      this.addLog(`#2. ngOnChanges: - ${propName}: ${previous} → ${current}`);
     }
   }
 
-  // 2. ngOnInit - Called once after the first ngOnChanges
+  // 3. ngOnInit - Called once after the first ngOnChanges
   ngOnInit(): void {
-    this.addLog('ngOnInit: Component initialized (called once)');
+    this.addLog('#3. ngOnInit: Component initialized (called once)');
     // Perfect place for:
     // - Fetching data from APIs
     // - Setting up subscriptions
     // - Initializing component properties
   }
 
-  // 3. ngDoCheck - Called during every change detection cycle
+  // 4. ngDoCheck - Called during every change detection cycle
   ngDoCheck(): void {
     this.checkCount++;
     if (this.checkCount <= 5 || this.checkCount % 10 === 0) {
-      this.addLog(`ngDoCheck: Change detection run #${this.checkCount}`);
+      this.addLog(`#4. ngDoCheck: Change detection run #${this.checkCount}`);
     }
     // Use for custom change detection
     // Warning: Called frequently, keep logic lightweight
   }
 
-  // 4. ngAfterContentInit - Called once after content projection
+  // 5. ngAfterContentInit - Called once after content projection
   ngAfterContentInit(): void {
-    this.addLog('ngAfterContentInit: Content projection initialized (called once)');
+    this.addLog('#5. ngAfterContentInit: Content projection initialized (called once)');
     // Perfect place for:
     // - Accessing projected content (ng-content)
     // - Initializing content children (ContentChild/ContentChildren)
   }
 
-  // 5. ngAfterContentChecked - Called after every check of projected content
+  // 6. ngAfterContentChecked - Called after every check of projected content
   ngAfterContentChecked(): void {
     this.contentCheckCount++;
     if (this.contentCheckCount <= 3 || this.contentCheckCount % 10 === 0) {
-      this.addLog(`ngAfterContentChecked: Content checked #${this.contentCheckCount}`);
+      this.addLog(`#6. ngAfterContentChecked: Content checked #${this.contentCheckCount}`);
     }
     // Called after ngDoCheck and after checking projected content
   }
 
-  // 6. ngAfterViewInit - Called once after component view initialization
+  // 7. ngAfterViewInit - Called once after component view initialization
   ngAfterViewInit(): void {
-    this.addLog('ngAfterViewInit: View initialized (called once)');
+    this.addLog('#7. ngAfterViewInit: View initialized (called once)');
     // Perfect place for:
     // - Accessing view children (ViewChild/ViewChildren)
     // - Initializing third-party libraries
     // - DOM manipulations
   }
 
-  // 7. ngAfterViewChecked - Called after every check of the component's view
+  // 8. ngAfterViewChecked - Called after every check of the component's view
   ngAfterViewChecked(): void {
     this.viewCheckCount++;
     if (this.viewCheckCount <= 3 || this.viewCheckCount % 10 === 0) {
-      this.addLog(`ngAfterViewChecked: View checked #${this.viewCheckCount}`);
+      this.addLog(`#8. ngAfterViewChecked: View checked #${this.viewCheckCount}`);
     }
     // Called after ngAfterContentChecked
   }
 
-  // 8. ngOnDestroy - Called just before component is destroyed
+  // 9. ngOnDestroy - Called just before component is destroyed
   ngOnDestroy(): void {
-    this.addLog('ngOnDestroy: Component is being destroyed');
+    this.addLog('#9. ngOnDestroy: Component is being destroyed');
     // Perfect place for:
     // - Unsubscribing from observables
     // - Cleaning up event listeners
     // - Releasing resources
-    console.log('Component destroyed - cleanup complete');
+    console.log('#9. ngOnDestroy: Component destroyed - cleanup complete');
   }
 
   // Helper method to increment counter

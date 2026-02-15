@@ -239,7 +239,7 @@ The repository now includes a comprehensive demonstration of Angular component l
 
 ### What's Included
 
-The `angular_lifecycle/` folder contains:
+The `angular-lifecycle-app/` folder contains:
 
 - **Interactive Demo Component**: A fully-functional component demonstrating all 9 lifecycle hooks
 - **Parent Component**: Test different scenarios (input changes, creation/destruction)
@@ -263,7 +263,7 @@ The `angular_lifecycle/` folder contains:
 
 ```bash
 # Navigate to the Angular lifecycle folder
-cd angular_lifecycle
+cd angular-lifecycle-app
 
 # View the README for detailed setup instructions
 cat README.md
@@ -272,7 +272,7 @@ cat README.md
 # ng serve
 ```
 
-See [angular_lifecycle/README.md](angular_lifecycle/README.md) for complete setup instructions and best practices.
+See [angular-lifecycle-app/README.md](angular-lifecycle-app/README.md) for complete setup instructions and best practices.
 
 ## Contributions
 
