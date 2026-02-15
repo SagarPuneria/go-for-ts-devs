@@ -5,6 +5,7 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Quick Reference Table](#quick-reference-table)
 - [Core Paradigm Differences](#core-paradigm-differences)
 - [Project Structure Mapping](#project-structure-mapping)
 - [Concept Mapping](#concept-mapping)
@@ -20,6 +21,894 @@
 ## Overview
 
 This guide helps experienced Go developers understand Angular development by mapping familiar Go concepts to their Angular equivalents. Frontend is an enterprise Angular application, and this guide focuses on practical patterns used in this codebase.
+
+---
+
+## Quick Reference Table
+
+Go developers use [pkg.go.dev/std](https://pkg.go.dev/std) for standard library docs. Here's the web equivalent:
+
+| **Go Concept** | **Web Equivalent** | **Documentation** |
+|----------------|-------------------|-------------------|
+| `pkg.go.dev/std` | **MDN Web Docs** | [developer.mozilla.org/en-US/docs/Web/API](https://developer.mozilla.org/en-US/docs/Web/API) |
+| Standard library | Web APIs (built into browser) | No npm install needed |
+| Package search | MDN search bar | [developer.mozilla.org](https://developer.mozilla.org) |
+
+### Finding Browser APIs (localStorage, sessionStorage, etc.)
+
+**Go:** Import from standard library → `pkg.go.dev`
+```go
+import "net/http"  // Then search: pkg.go.dev/net/http
+```
+
+**TypeScript:** Browser APIs are globally available → MDN docs
+```typescript
+localStorage.clear();     // Search: MDN localStorage
+window.location.reload(); // Search: MDN Location
+```
+
+**Key Resources:**
+- 📚 [MDN Web API Reference](https://developer.mozilla.org/en-US/docs/Web/API)
+- 💾 [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage), [sessionStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)
+- 🌐 [Window](https://developer.mozilla.org/en-US/docs/Web/API/Window), [Document](https://developer.mozilla.org/en-US/docs/Web/API/Document), [Navigator](https://developer.mozilla.org/en-US/docs/Web/API/Navigator)
+
+---
+
+### Finding Third-Party Libraries (@ngxs/store, rxjs, etc.)
+
+**Workflow:** `package.json` → [npmjs.com](https://www.npmjs.com/) → Find "Homepage" link → Official docs
+
+**Example:**
+```typescript
+import { Store } from '@ngxs/store';
+// 1. Check version: package.json → "@ngxs/store": "3.7.5"
+// 2. Visit: npmjs.com/package/@ngxs/store
+// 3. Click "Homepage" → ngxs.io
+// 4. Navigate to version docs -> ngxs.io/v3.7/concepts/store
+// 5. Or use npm CLI to open docs -> npm docs @ngxs/store
+```
+
+**Common MarketIQ Libraries:**
+
+| **Library** | **npm Package** | **Official Docs** | **Purpose** |
+|------------|----------------|-------------------|-------------|
+| NGXS | [@ngxs/store](https://www.npmjs.com/package/@ngxs/store) | [ngxs.io](https://www.ngxs.io) | State management |
+| RxJS | [rxjs](https://www.npmjs.com/package/rxjs) | [rxjs.dev](https://rxjs.dev) | Reactive programming |
+| Angular Material | [@angular/material](https://www.npmjs.com/package/@angular/material) | [material.angular.io](https://material.angular.io) | UI components |
+| PrimeNG | [primeng](https://www.npmjs.com/package/primeng) | [primeng.org](https://primeng.org) | UI components |
+| AG Grid | [ag-grid-angular](https://www.npmjs.com/package/ag-grid-angular) | [ag-grid.com](https://www.ag-grid.com) | Data grid |
+
+**Pro Tip:** Use IDE's IntelliSense (Cmd+Click) to see type definitions and source.
+
+---
+
+### Finding Language Documentation (TypeScript vs Go)
+
+| **Aspect** | **TypeScript** | **Go** |
+|-----------|---------------|---------|
+| **Language Docs** | [typescriptlang.org/docs](https://www.typescriptlang.org/docs/) | [go.dev/doc](https://go.dev/doc/) |
+| **Getting Started** | [TypeScript in 5 min](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) | [Tour of Go](https://go.dev/tour/) |
+| **Handbook** | [TS Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) | [Effective Go](https://go.dev/doc/effective_go) |
+| **Playground** | [typescriptlang.org/play](https://www.typescriptlang.org/play) | [go.dev/play](https://go.dev/play) |
+| **Package Registry** | [npmjs.com](https://www.npmjs.com/) | [pkg.go.dev](https://pkg.go.dev/) |
+| **Standard Library** | Browser APIs ([MDN](https://developer.mozilla.org/)) | [pkg.go.dev/std](https://pkg.go.dev/std) |
+
+**Key Differences:**
+
+1. **Ecosystem Split**:
+   - **TypeScript**: Language docs separate from package registry (npmjs.com) and browser APIs (MDN)
+   - **Go**: More integrated, but still splits language (go.dev/doc) from packages (pkg.go.dev)
+
+2. **Standard Library**:
+   - **TypeScript**: No standard library - relies on browser's Web APIs or Node.js APIs
+   - **Go**: Rich standard library included with the language
+
+3. **Documentation Structure**:
+   - **TypeScript**: Focus on type system, compilation, and language features
+   - **Go**: Focus on language spec, standard library, and best practices
+
+**Example: Learning Basic Concepts**
+
+```typescript
+// TypeScript: Learn about types
+// Visit: typescriptlang.org/docs/handbook/2/everyday-types.html
+
+interface User {
+  id: number;
+  name: string;
+  email?: string;  // Optional property
+}
+
+function greet(user: User): string {
+  return `Hello, ${user.name}!`;
+}
+```
+
+```go
+// Go: Learn about types
+// Visit: go.dev/tour/basics/11
+
+type User struct {
+    ID    int
+    Name  string
+    Email string  // No optional concept, use pointer: *string
+}
+
+func greet(user User) string {
+    return fmt.Sprintf("Hello, %s!", user.Name)
+}
+```
+
+**Quick Lookup:**
+
+| **What You Need** | **Where to Go** |
+|------------------|-----------------|
+| TypeScript types, interfaces, generics | [typescriptlang.org/docs](https://www.typescriptlang.org/docs/) |
+| JavaScript APIs (Array, Date, JSON, etc.) | [MDN JavaScript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript) |
+| Browser APIs (localStorage, fetch, DOM) | [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API) |
+| npm packages (Angular, RxJS, lodash) | [npmjs.com](https://www.npmjs.com/) → Homepage link |
+| Go packages | [pkg.go.dev](https://pkg.go.dev/) |
+
+---
+
+### How to Identify Where an API Comes From (No Import Statement?)
+
+**The Confusion:** In Go, everything must be imported. In TypeScript/Angular, some things are globally available without imports.
+
+#### The Four Categories of Code in TypeScript/Angular
+
+When coding in TypeScript/Angular, you'll encounter **four categories** of code. Three require **no imports**, and one requires **explicit imports**.
+
+```typescript
+// Example TypeScript file
+import { Component, OnInit } from '@angular/core';  // ✅ Category 4: Explicit import required
+
+export class MyComponent implements OnInit {
+  // Category 3: TypeScript Language Features (no import)
+  user: Partial<User>;  // Partial<T> is a TypeScript utility type
+  status: 'active' | 'inactive';  // Union type
+  
+  ngOnInit(): void {
+    // Category 2: JavaScript Built-ins (no import)
+    const arr = Array.isArray([1, 2, 3]);
+    const data = JSON.parse('{"key": "value"}');
+    const now = new Date();
+    
+    // Category 1: Browser APIs (no import)
+    localStorage.setItem('key', 'value');
+    console.log('Hello');
+    window.location.href = '/home';
+    
+    // Category 3: TypeScript types (no import)
+    const name: string = 'John';
+    const age: number = 30;
+  }
+}
+```
+
+---
+
+### Category 1: 🌐 Browser APIs (No Import Needed)
+
+**What:** APIs provided by the web browser runtime
+
+**Common Examples:**
+- **Storage:** `localStorage`, `sessionStorage`
+- **Browser Objects:** `window`, `document`, `navigator`, `location`, `history`
+- **Network:** `fetch`, `XMLHttpRequest`, `WebSocket`
+- **Console:** `console` (log, error, warn, debug)
+- **DOM:** `HTMLElement`, `Event`, `Element`
+- **Timers:** `setTimeout`, `setInterval`, `requestAnimationFrame`
+
+**Why no import?** These are provided globally by the browser runtime environment.
+
+**Documentation:** [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API)
+
+**Example:**
+```typescript
+// All work without imports
+localStorage.setItem('token', 'abc123');
+const data = localStorage.getItem('token');
+
+window.location.reload();
+document.getElementById('myElement');
+console.log('Debug message');
+
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+---
+
+### Category 2: 📦 JavaScript Built-ins (No Import Needed)
+
+**What:** Core JavaScript/ECMAScript language features
+
+**Common Examples:**
+- **Arrays:** `Array`, `Array.isArray()`, `Array.from()`
+- **Objects:** `Object`, `Object.keys()`, `Object.values()`, `Object.entries()`
+- **Strings:** `String`, string methods
+- **Numbers:** `Number`, `parseInt()`, `parseFloat()`, `isNaN()`
+- **JSON:** `JSON.parse()`, `JSON.stringify()`
+- **Math:** `Math.floor()`, `Math.random()`, `Math.max()`
+- **Dates:** `Date`, `new Date()`
+- **Promises:** `Promise`, `Promise.all()`, `Promise.race()`
+- **Collections:** `Map`, `Set`, `WeakMap`, `WeakSet`
+- **Errors:** `Error`, `TypeError`, `RangeError`
+- **RegEx:** `RegExp`
+
+**Why no import?** These are part of the JavaScript language specification.
+
+**Documentation:** [MDN JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)
+
+**Example:**
+```typescript
+// All work without imports
+const isArray = Array.isArray([1, 2, 3]);  // true
+const keys = Object.keys({ a: 1, b: 2 });  // ['a', 'b']
+const json = JSON.stringify({ name: 'John' });
+const num = Math.floor(4.7);  // 4
+const date = new Date();
+const promise = Promise.resolve(42);
+
+const map = new Map();
+map.set('key', 'value');
+
+const set = new Set([1, 2, 3, 3]);  // Set {1, 2, 3}
+```
+
+---
+
+### Category 3: 🔷 TypeScript Language Features (No Import Needed)
+
+**What:** TypeScript's type system and language features (compile-time only)
+
+**Primitive Types:**
+- `string`, `number`, `boolean`
+- `null`, `undefined`, `void`
+- `any`, `unknown`, `never`
+- `symbol`, `bigint`
+
+**Utility Types:**
+- `Partial<T>` - Make all properties optional
+- `Required<T>` - Make all properties required
+- `Readonly<T>` - Make all properties readonly
+- `Pick<T, K>` - Pick specific properties from T
+- `Omit<T, K>` - Omit specific properties from T
+- `Record<K, V>` - Object with keys K and values V
+- `Exclude<T, U>` - Exclude types from union
+- `Extract<T, U>` - Extract types from union
+- `NonNullable<T>` - Remove null/undefined
+- `ReturnType<T>` - Get function return type
+- `Parameters<T>` - Get function parameter types
+
+**Type Keywords:**
+- `interface` - Define object shape
+- `type` - Type alias
+- `enum` - Enumeration
+- `class` - Class definition
+- `namespace` - Namespace organization
+
+**Type Operators:**
+- `typeof` - Get type of value
+- `keyof` - Get keys of type
+- `as` - Type assertion
+- `is` - Type guard
+- `in` - Property check
+- `extends` - Generic constraint
+- `infer` - Type inference in conditionals
+
+**Why no import?** These are part of TypeScript's type system and are compile-time only (removed during transpilation).
+
+**Documentation:** [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/)
+
+**Example:**
+```typescript
+// All work without imports
+
+// Primitive types
+const name: string = 'John';
+const age: number = 30;
+const isActive: boolean = true;
+const nothing: null = null;
+const notDefined: undefined = undefined;
+
+// Interface
+interface User {
+  id: number;
+  name: string;
+  email?: string;
+}
+
+// Type alias
+type UserId = number;
+type Status = 'active' | 'inactive' | 'pending';
+
+// Enum
+enum Role {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST'
+}
+
+// Utility types
+type PartialUser = Partial<User>;  // All properties optional
+type ReadonlyUser = Readonly<User>;  // All properties readonly
+type UserKeys = keyof User;  // 'id' | 'name' | 'email'
+type UserWithoutEmail = Omit<User, 'email'>;
+type UserRecord = Record<string, User>;
+
+// Type operators
+const user = { id: 1, name: 'John' };
+type UserType = typeof user;  // { id: number; name: string }
+
+// Generic function with constraint
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+// Type guard
+function isUser(obj: any): obj is User {
+  return typeof obj === 'object' && 'id' in obj && 'name' in obj;
+}
+```
+
+---
+
+### Category 4: 📚 Framework/Library Code (Import Required ✅)
+
+**What:** Third-party packages installed via npm
+
+**Angular Framework Examples:**
+- **Core:** `Component`, `Injectable`, `NgModule`, `Directive`, `Pipe`
+- **Lifecycle:** `OnInit`, `OnDestroy`, `OnChanges`, `AfterViewInit`
+- **Communication:** `Input`, `Output`, `EventEmitter`
+- **HTTP:** `HttpClient`, `HttpHeaders`, `HttpParams`
+- **Routing:** `Router`, `ActivatedRoute`, `RouterModule`
+- **Forms:** `FormBuilder`, `FormGroup`, `FormControl`, `Validators`
+- **DI:** `Inject`, `InjectionToken`
+
+**RxJS Library Examples:**
+- **Core:** `Observable`, `Subject`, `BehaviorSubject`, `ReplaySubject`
+- **Creation:** `of`, `from`, `interval`, `timer`, `fromEvent`
+- **Operators:** `map`, `filter`, `tap`, `switchMap`, `mergeMap`, `catchError`, `debounceTime`, `distinctUntilChanged`
+- **Combination:** `forkJoin`, `combineLatest`, `merge`, `zip`
+
+**Other Common Libraries:**
+- **NGXS:** `Store`, `Select`, `Action`, `State`, `Selector`
+- **Angular Material:** `MatDialog`, `MatSnackBar`, `MatTableDataSource`
+- **PrimeNG:** Various UI components
+- **Lodash:** `cloneDeep`, `debounce`, `throttle`, `groupBy`
+- **Moment.js / date-fns:** Date utilities
+
+**Why import required?** These are external dependencies not built into the language, TypeScript, or browser.
+
+**Documentation:** Check import path, then find official docs (npmjs.com → Homepage)
+
+**Example:**
+```typescript
+// ✅ All these require explicit imports
+
+// Angular imports
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+// RxJS imports
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { map, filter, tap, switchMap, catchError, debounceTime } from 'rxjs/operators';
+
+// NGXS imports
+import { Store, Select } from '@ngxs/store';
+import { MyState } from './store/my.state';
+
+// Third-party library imports
+import { cloneDeep } from 'lodash-es';
+import * as moment from 'moment';
+
+@Component({
+  selector: 'app-my-component',
+  templateUrl: './my-component.component.html'
+})
+export class MyComponent implements OnInit {
+  @Input() data: any;
+  @Output() clicked = new EventEmitter<void>();
+  
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store
+  ) {}
+  
+  ngOnInit(): void {
+    this.loadData();
+  }
+}
+```
+
+---
+
+**Visual Example of all 4 categories:**
+```typescript
+// ❌ No imports needed for these 3 categories:
+
+// Category 1: Browser API
+localStorage.setItem('key', 'value');
+window.location.href = '/home';
+
+// Category 2: JavaScript Built-in
+Array.isArray([1, 2, 3]);
+JSON.parse('{"name": "John"}');
+
+// Category 3: TypeScript Language Feature
+const user: Partial<User> = {};
+const keys: keyof User = 'name';
+type Status = 'active' | 'inactive';
+interface User { name: string; }
+
+// ✅ Imports required for Category 4:
+import { Component, OnInit } from '@angular/core';  // Angular
+import { Observable } from 'rxjs';                   // RxJS
+import { Store } from '@ngxs/store';                // NGXS
+```
+
+**Go Comparison:**
+```go
+// Go: EVERYTHING needs an import
+import (
+    "fmt"         // Must import
+    "net/http"    // Must import
+    "encoding/json"  // Must import
+)
+
+func main() {
+    fmt.Println("Hello")  // Won't work without import
+}
+```
+
+**Key Insight:**
+ - Categories 1-3 are globally available (no import needed):
+    - ❌ Browser APIs → provided by browser runtime environment
+    - ❌ JavaScript Built-ins → provided by language standard library
+    - ❌ TypeScript Features → Type system (provided by compile-time only)
+ - Category 4 requires explicit imports:
+    - ✅ Libraries/Frameworks → External dependencies
+
+---
+
+#### API Identification Decision Tree
+
+Use this flowchart to identify where an API comes from:
+
+```
+Is there an import statement at the top?
+│
+├─ YES → Check the import path
+│   ├─ '@angular/...' → Angular Framework (angular.dev)
+│   ├─ 'rxjs/...' → RxJS Library (rxjs.dev)
+│   ├─ '@cbre/...' → Internal CBRE Library (codebase)
+│   └─ 'package-name' → Third-party (npmjs.com → official docs)
+│
+└─ NO → Check what it is
+    ├─ Browser object (window, document, localStorage) → MDN Web Docs
+    ├─ Built-in JavaScript (Array, Object, Promise, Map) → MDN JavaScript Reference
+    ├─ TypeScript language feature (string, Partial<T>, interface) → TypeScript Docs
+    └─ If still unsure → Cmd+Click in IDE to see definition file
+```
+
+---
+
+#### Method 1: Use Your IDE (Fastest Way)
+
+**In VS Code (or any IDE):**
+
+1. **Cmd+Click (Mac) or Ctrl+Click (Windows)** on the API name
+   - Takes you to the type definition
+   - Shows you where it's declared
+
+2. **Hover over the API** to see type information
+   - Shows the signature
+   - Shows documentation comments
+
+**Example:**
+
+```typescript
+// Hover over or Cmd+Click these:
+Array.isArray([1, 2, 3]);      // → Takes you to lib.es5.d.ts (JavaScript built-in)
+localStorage.clear();           // → Takes you to lib.dom.d.ts (Browser API)
+ngOnInit(): void { }           // → Takes you to @angular/core (must be imported)
+```
+
+**What the file names mean:**
+- `lib.es5.d.ts` / `lib.es2015.d.ts` → JavaScript/ECMAScript built-in (language feature)
+- `lib.dom.d.ts` → Browser Web APIs (MDN documentation)
+- `node_modules/@angular/...` → Angular framework (angular.dev)
+- `node_modules/rxjs/...` → RxJS library (rxjs.dev)
+
+---
+
+#### Method 2: The Three-Question Method
+
+Ask yourself these three questions:
+
+##### Question 1: Is it a Browser API?
+
+**Common Browser APIs (globally available, no import needed):**
+- `window` - The browser window object
+- `document` - The DOM document
+- `localStorage` / `sessionStorage` - Web Storage API
+- `console` - Browser console
+- `fetch` - Network requests
+- `navigator` - Browser/device info
+- `location` - Current URL
+- `history` - Browser history
+
+**How to verify:** Search MDN
+- Go to: [developer.mozilla.org](https://developer.mozilla.org)
+- Search for the API name
+- If you find it under "Web APIs" → It's a browser API
+
+**Example:**
+```typescript
+// All browser APIs - no imports needed
+localStorage.setItem('key', 'value');  // MDN: Web Storage API
+window.location.href = '/home';        // MDN: Location API
+document.getElementById('myId');       // MDN: Document API
+fetch('https://api.example.com/data'); // MDN: Fetch API
+```
+
+**Go Analogy:**
+```go
+// In Go, you'd import net/http to make HTTP calls
+import "net/http"
+
+// In browser TypeScript, fetch is globally available
+// No import needed because it's provided by the browser runtime
+```
+
+---
+
+##### Question 2: Is it a JavaScript Built-in?
+
+**Common JavaScript Built-ins (part of the language):**
+- `Array` - Array manipulation
+- `Object` - Object utilities
+- `String` - String methods
+- `Number` - Number utilities
+- `Date` - Date/time handling
+- `Math` - Mathematical operations
+- `Promise` - Async operations
+- `Map` / `Set` - Data structures
+- `JSON` - JSON parsing/stringifying
+- `Error` - Error handling
+
+**How to verify:** Search MDN JavaScript Reference
+- Go to: [developer.mozilla.org/en-US/docs/Web/JavaScript/Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
+- Look under "Standard built-in objects"
+
+**Example:**
+```typescript
+// All JavaScript built-ins - no imports needed
+Array.isArray([1, 2, 3]);              // MDN: JavaScript Reference > Array
+Object.keys({ a: 1, b: 2 });           // MDN: JavaScript Reference > Object
+JSON.parse('{"name": "John"}');        // MDN: JavaScript Reference > JSON
+Math.floor(4.7);                       // MDN: JavaScript Reference > Math
+new Date();                            // MDN: JavaScript Reference > Date
+Promise.resolve(42);                   // MDN: JavaScript Reference > Promise
+```
+
+**Go Analogy:**
+```go
+// In Go, you import packages for everything
+import (
+    "encoding/json"
+    "math"
+)
+
+// In JavaScript/TypeScript, these are built into the language
+// No import needed - they're part of the JavaScript standard
+```
+
+---
+
+##### Question 3: Is it a TypeScript Language Feature?
+
+**TypeScript provides several language features that don't require imports:**
+
+**Primitive Types (no import needed):**
+- `string` - String type
+- `number` - Number type (integers and floats)
+- `boolean` - True/false
+- `null` - Null value
+- `undefined` - Undefined value
+- `void` - No return value
+- `any` - Any type (avoid when possible)
+- `unknown` - Unknown type (safer than any)
+- `never` - Never returns
+- `symbol` - Unique identifier
+- `bigint` - Large integers
+
+**Type Keywords (no import needed):**
+- `interface` - Define object shape
+- `type` - Type alias
+- `enum` - Enumeration
+- `class` - Class definition
+- `namespace` - Namespace organization
+
+**Utility Types (built into TypeScript):**
+- `Partial<T>` - Make all properties optional
+- `Required<T>` - Make all properties required
+- `Readonly<T>` - Make all properties readonly
+- `Pick<T, K>` - Pick specific properties
+- `Omit<T, K>` - Omit specific properties
+- `Record<K, V>` - Object with keys of type K and values of type V
+- `Exclude<T, U>` - Exclude types from T that are assignable to U
+- `Extract<T, U>` - Extract types from T that are assignable to U
+- `NonNullable<T>` - Remove null and undefined
+- `ReturnType<T>` - Get return type of function
+- `Parameters<T>` - Get parameter types of function
+
+**Type Operators (no import needed):**
+- `typeof` - Get type of value
+- `keyof` - Get keys of interface/type
+- `as` - Type assertion
+- `is` - Type guard
+- `in` - Check if property exists
+- `extends` - Generic constraint
+- `infer` - Infer type in conditional
+
+**How to verify:** These are part of TypeScript language
+- Go to: [typescriptlang.org/docs/handbook/utility-types.html](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- Look in TypeScript Handbook for language features
+
+**Example:**
+```typescript
+// All TypeScript language features - no imports needed
+
+// Primitive types
+const name: string = 'John';
+const age: number = 30;
+const isActive: boolean = true;
+const nullable: string | null = null;
+
+// Interface
+interface User {
+  id: number;
+  name: string;
+  email?: string;  // Optional property
+}
+
+// Type alias
+type UserId = number;
+type UserStatus = 'active' | 'inactive' | 'pending';
+
+// Enum
+enum Role {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST'
+}
+
+// Utility types
+type PartialUser = Partial<User>;  // All properties optional
+type ReadonlyUser = Readonly<User>;  // All properties readonly
+type UserWithoutEmail = Omit<User, 'email'>;  // Omit email property
+type UserKeys = keyof User;  // 'id' | 'name' | 'email'
+
+// Utility type in function
+function updateUser(id: number, updates: Partial<User>) {
+  // updates can have any subset of User properties
+}
+
+// Type assertion
+const data = JSON.parse('{"id": 1}') as User;
+
+// Type guard
+function isUser(obj: any): obj is User {
+  return typeof obj === 'object' && 'id' in obj && 'name' in obj;
+}
+
+// Generic with constraint
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+
+**Go Analogy:**
+```go
+// In Go, even basic types are part of the language
+type User struct {
+    ID    int
+    Name  string
+    Email *string  // Optional using pointer
+}
+
+// TypeScript has richer type system built into the language
+// Similar to how Go has basic types built-in, but more powerful
+```
+
+**When you see these in code:**
+```typescript
+// No imports at top of file
+export class UserService {
+  // string, number, Partial<User> - all TypeScript language features
+  updateUser(id: number, updates: Partial<User>): Promise<User> {
+    // Promise is JavaScript built-in
+    // Partial<User> is TypeScript utility type
+    // Both work without imports!
+  }
+}
+```
+
+**TypeScript Definition Files:**
+- When you Cmd+Click on these, you'll see files like:
+- `lib.es5.d.ts` - JavaScript built-ins
+- `lib.dom.d.ts` - Browser APIs
+- No file means it's a TypeScript keyword (interface, type, etc.)
+
+---
+
+##### Question 4: Is it from Angular or a Library?
+
+**Angular Framework APIs (MUST be imported):**
+- `Component`, `Injectable`, `NgModule` - Decorators
+- `OnInit`, `OnDestroy`, `OnChanges` - Lifecycle interfaces
+- `Input`, `Output`, `EventEmitter` - Component communication
+- `HttpClient` - HTTP requests
+- `Router`, `ActivatedRoute` - Routing
+
+**How to verify:**
+1. Look for import statement at top of file
+2. Check if it starts with `@angular/`
+3. Search [angular.dev](https://angular.dev)
+
+**Example:**
+```typescript
+// Angular APIs - MUST have imports
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+@Component({ ... })  // From @angular/core
+export class MyComponent implements OnInit {  // OnInit from @angular/core
+  constructor(private http: HttpClient) {}    // HttpClient from @angular/common/http
+}
+```
+
+**Third-Party Libraries (MUST be imported):**
+```typescript
+// RxJS - reactive programming
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
+
+// NGXS - state management
+import { Store } from '@ngxs/store';
+
+// Lodash - utility functions
+import { cloneDeep } from 'lodash-es';
+```
+
+---
+
+#### Practical Lookup Guide
+
+**Scenario 1: I see `localStorage.clear()` with no import**
+
+1. ✅ **Try:** Cmd+Click in IDE → Takes you to `lib.dom.d.ts`
+2. ✅ **Verify:** Search "localStorage" on [developer.mozilla.org](https://developer.mozilla.org)
+3. ✅ **Result:** Found under "Web APIs" → Browser API
+4. ✅ **Documentation:** [MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+
+**Scenario 2: I see `Array.isArray()` with no import**
+
+1. ✅ **Try:** Cmd+Click in IDE → Takes you to `lib.es5.d.ts`
+2. ✅ **Verify:** Search "Array.isArray" on MDN
+3. ✅ **Result:** Found under "JavaScript Reference > Standard built-in objects"
+4. ✅ **Documentation:** [MDN Array.isArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
+
+**Scenario 3: I see `ngOnInit()` method**
+
+1. ✅ **Check top of file:** `import { OnInit } from '@angular/core';` ✓
+2. ✅ **Starts with @angular/:** It's Angular framework
+3. ✅ **Search:** [angular.dev](https://angular.dev) for "OnInit"
+4. ✅ **Documentation:** [Angular Lifecycle Hooks](https://angular.dev/guide/components/lifecycle)
+
+**Scenario 4: I see `this.store.select()` method**
+
+1. ✅ **Check top of file:** `import { Store } from '@ngxs/store';` ✓
+2. ✅ **It's from @ngxs/store:** Third-party library
+3. ✅ **Search npm:** [npmjs.com/package/@ngxs/store](https://www.npmjs.com/package/@ngxs/store)
+4. ✅ **Find docs link:** Homepage → [ngxs.io](https://www.ngxs.io)
+
+---
+
+#### Quick Reference Table: Common APIs
+
+| **API** | **Import Needed?** | **Type** | **Documentation** |
+|---------|-------------------|----------|-------------------|
+| `localStorage` | ❌ No | Browser API | [MDN Web Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) |
+| `sessionStorage` | ❌ No | Browser API | [MDN Web Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) |
+| `window` | ❌ No | Browser API | [MDN Window](https://developer.mozilla.org/en-US/docs/Web/API/Window) |
+| `document` | ❌ No | Browser API | [MDN Document](https://developer.mozilla.org/en-US/docs/Web/API/Document) |
+| `console` | ❌ No | Browser API | [MDN Console](https://developer.mozilla.org/en-US/docs/Web/API/Console) |
+| `fetch` | ❌ No | Browser API | [MDN Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) |
+| `Array.isArray()` | ❌ No | JavaScript Built-in | [MDN Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) |
+| `Object.keys()` | ❌ No | JavaScript Built-in | [MDN Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) |
+| `JSON.parse()` | ❌ No | JavaScript Built-in | [MDN JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) |
+| `Math.floor()` | ❌ No | JavaScript Built-in | [MDN Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) |
+| `Promise` | ❌ No | JavaScript Built-in | [MDN Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) |
+| `Date` | ❌ No | JavaScript Built-in | [MDN Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| `string`, `number`, `boolean` | ❌ No | TypeScript Type | [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html) |
+| `Partial<T>` | ❌ No | TypeScript Utility Type | [TypeScript Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html) |
+| `Record<K,V>` | ❌ No | TypeScript Utility Type | [TypeScript Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html) |
+| `interface`, `type` | ❌ No | TypeScript Keyword | [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html) |
+| `Component` | ✅ Yes | Angular Framework | [Angular Components](https://angular.dev/guide/components) |
+| `OnInit` | ✅ Yes | Angular Framework | [Angular Lifecycle](https://angular.dev/guide/components/lifecycle) |
+| `HttpClient` | ✅ Yes | Angular Framework | [Angular HttpClient](https://angular.dev/guide/http) |
+| `Observable` | ✅ Yes | RxJS Library | [RxJS Observable](https://rxjs.dev/guide/observable) |
+| `Store` | ✅ Yes | NGXS Library | [NGXS Store](https://www.ngxs.io/concepts/store) |
+
+---
+
+#### Why This Difference Exists
+
+**Go Philosophy:**
+- Explicit is better than implicit
+- Everything must be imported
+- Clear dependency management
+
+**JavaScript/TypeScript/Browser Philosophy:**
+- Browser provides runtime APIs globally (localStorage, window, etc.)
+- JavaScript language provides built-ins globally (Array, Object, etc.)
+- Only third-party libraries and frameworks require imports
+- Convenience for common operations
+
+**Trade-offs:**
+
+| **Aspect** | **Go (Explicit Imports)** | **TypeScript (Global + Imports)** |
+|------------|--------------------------|----------------------------------|
+| **Clarity** | ✅ Always know where things come from | ⚠️ Must learn what's global vs imported |
+| **Convenience** | ⚠️ More imports needed | ✅ Common things "just work" |
+| **Discovery** | ✅ `go doc` shows everything | ⚠️ Must know where to look |
+| **Bundle Size** | N/A (compiled binary) | ✅ Tree-shaking removes unused code |
+
+---
+
+#### Pro Tips for Go Developers
+
+1. **Use IDE IntelliSense religiously**
+   - Cmd+Click to jump to definitions
+   - Hover to see documentation
+   - Use "Go to Type Definition" (Cmd+T)
+
+2. **Learn the four main sources**
+   - Browser APIs → MDN Web Docs
+   - JavaScript built-ins → MDN JavaScript Reference
+   - TypeScript language features → TypeScript Handbook
+   - Framework/Libraries → Check imports, then find official docs
+
+3. **Watch out for naming conflicts**
+   ```typescript
+   // Both 'Headers' exist!
+   import { Headers } from '@angular/common/http';  // Angular's Headers
+   // vs
+   const headers = new Headers();  // Browser's Headers API
+   
+   // Use IDE to see which one you're using
+   ```
+
+4. **Create a mental model**
+   - If it feels "too convenient" (no import) → Probably browser or language built-in
+   - If it's framework-specific → Must be imported
+   - When in doubt → Cmd+Click in IDE
+
+5. **Use TypeScript's `.d.ts` files**
+   - These are type definition files
+   - `lib.dom.d.ts` = Browser APIs
+   - `lib.es5.d.ts` = JavaScript built-ins
+   - `node_modules/@angular/**/*.d.ts` = Angular framework
 
 ---
 
@@ -1050,6 +1939,8 @@ Quick lookup table for Go → Angular concept mapping:
 
 | **When you think...** | **In Angular, it's...** |
 |----------------------|------------------------|
+| `pkg.go.dev/std` | MDN Web Docs |
+| Standard library | Web APIs (built into browser) |
 | HTTP handler | Component |
 | Service layer | Injectable Service |
 | Struct | Interface/Type |
