@@ -31,7 +31,7 @@ func twoReturnedValues(name string) (string, int) {
 }
 
 func withTypeReturn(name string) User {
-	return User{Name: name, Age: 50, Email: "oliveirabalsa2@gmail.com"}
+	return User{Name: name, Age: 50, Email: "SagarPuneria2@gmail.com"}
 }
 
 func operators(x interface{}, y int) bool {

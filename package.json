@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oliveirabalsa/go-for-ts-devs.git"
+    "url": "git+https://github.com/SagarPuneria/go-for-ts-devs.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oliveirabalsa/go-for-ts-devs/issues"
+    "url": "https://github.com/SagarPuneria/go-for-ts-devs/issues"
   },
-  "homepage": "https://github.com/oliveirabalsa/go-for-ts-devs#readme"
+  "homepage": "https://github.com/SagarPuneria/go-for-ts-devs#readme"
 }

@@ -1,3 +1,3 @@
-module github.com/oliveirabalsa/go-for-ts-devs
+module github.com/SagarPuneria/go-for-ts-devs
 
 go 1.20
