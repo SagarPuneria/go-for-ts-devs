@@ -86,6 +86,15 @@ The repository is organized into topic-based folders, each containing equivalent
 - **`tests/`**: Testing examples and patterns
   - `test.go`: Go testing examples
 
+### Angular Examples
+
+- **`angular_lifecycle/`**: Angular component lifecycle hooks demonstration
+  - `lifecycle.component.ts`: Complete lifecycle hooks implementation
+  - `parent.component.ts`: Interactive parent component for testing
+  - `app.module.ts`: Module configuration
+  - `lifecycle-hooks-reference.ts`: Comprehensive reference guide with patterns
+  - `README.md`: Detailed documentation and best practices
+
 ## Getting Started
 
 ### Prerequisites
@@ -223,6 +232,47 @@ As you explore the examples, you'll discover important differences between Go an
 ### Compilation
 - **Go**: Compiled to native machine code, single binary output
 - **TypeScript**: Transpiled to JavaScript, runs on Node.js/browsers
+
+## Angular Component Lifecycle Hooks
+
+The repository now includes a comprehensive demonstration of Angular component lifecycle hooks! This is a bonus section for developers interested in Angular framework patterns.
+
+### What's Included
+
+The `angular_lifecycle/` folder contains:
+
+- **Interactive Demo Component**: A fully-functional component demonstrating all 9 lifecycle hooks
+- **Parent Component**: Test different scenarios (input changes, creation/destruction)
+- **Comprehensive Documentation**: Detailed explanations of when and how to use each hook
+- **Quick Reference Guide**: Practical patterns and best practices
+- **Visual Logs**: Real-time logging to see hook execution order
+
+### All 9 Lifecycle Hooks Covered
+
+1. **constructor()** - Component instantiation
+2. **ngOnChanges()** - Input property changes
+3. **ngOnInit()** - Component initialization (most commonly used)
+4. **ngDoCheck()** - Custom change detection
+5. **ngAfterContentInit()** - Content projection initialized
+6. **ngAfterContentChecked()** - After content checked
+7. **ngAfterViewInit()** - View initialized (access ViewChild here)
+8. **ngAfterViewChecked()** - After view checked
+9. **ngOnDestroy()** - Cleanup before destruction
+
+### Quick Start for Angular Demo
+
+```bash
+# Navigate to the Angular lifecycle folder
+cd angular_lifecycle
+
+# View the README for detailed setup instructions
+cat README.md
+
+# Copy files to your Angular project and run:
+# ng serve
+```
+
+See [angular_lifecycle/README.md](angular_lifecycle/README.md) for complete setup instructions and best practices.
 
 ## Contributions
 
