@@ -196,18 +196,38 @@ bootstrapApplication(ParentComponent, {
 - Use `ngAfterViewInit()` for ViewChild access
 - Keep `ngDoCheck()` logic lightweight
 - Use `ngOnChanges()` to react to input changes
+- **Use async pipe in templates to auto-manage subscriptions**
+- Use `takeUntil()` pattern for manual subscriptions
 
 ### ❌ DON'T:
 - Don't put complex logic in constructor
 - Don't access ViewChild in ngOnInit (use ngAfterViewInit)
-- Don't forget to unsubscribe in ngOnDestroy
+- Don't forget to unsubscribe in ngOnDestroy (or use async pipe!)
 - Don't perform heavy operations in frequently-called hooks
 - Don't modify component state in ngAfterViewChecked (causes ExpressionChangedAfterItHasBeenCheckedError)
+- Don't manually subscribe when async pipe would work
 
 ## 📚 Common Use Cases
 
-### Fetching Data
+### Fetching Data (Using Async Pipe - Recommended)
 ```typescript
+// Component
+data$: Observable<any>;
+
+ngOnInit(): void {
+  this.data$ = this.dataService.getData();
+}
+
+// Template
+// <div *ngIf="data$ | async as data">
+//   {{ data | json }}
+// </div>
+```
+
+**Alternative: Manual Subscription**
+```typescript
+data: any;
+
 ngOnInit(): void {
   this.dataService.getData().subscribe(data => {
     this.data = data;
@@ -215,16 +235,51 @@ ngOnInit(): void {
 }
 ```
 
-### Cleanup Subscriptions
+### Cleanup Subscriptions (Using Async Pipe - Recommended)
+```typescript
+// Component class
+data$: Observable<any>;
+
+ngOnInit(): void {
+  this.data$ = this.dataService.getData();
+  // No need to subscribe or unsubscribe!
+}
+
+// Template
+// <div *ngIf="data$ | async as data">{{ data }}</div>
+```
+
+**Alternative: Manual Subscription (if async pipe not suitable)**
 ```typescript
 private subscription: Subscription;
 
 ngOnInit(): void {
-  this.subscription = this.service.getData().subscribe();
+  this.subscription = this.dataService.getData().subscribe(data => {
+    this.data = data;
+  });
 }
 
 ngOnDestroy(): void {
   this.subscription.unsubscribe();
+}
+```
+
+**Best Practice: takeUntil Pattern**
+```typescript
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+private destroy$ = new Subject<void>();
+
+ngOnInit(): void {
+  this.dataService.getData()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(data => this.data = data);
+}
+
+ngOnDestroy(): void {
+  this.destroy$.next();
+  this.destroy$.complete();
 }
 ```
 
