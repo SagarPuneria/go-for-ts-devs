@@ -22,11 +22,11 @@ import { Component } from '@angular/core';
       </div>
 
       <div class="info-box">
-        <h3>What's happening?</h3>
+        <h3>🎮 What You Can Do?</h3>
         <ul>
-          <li><strong>Change the name:</strong> Triggers ngOnChanges</li>
+          <li><strong>Change the component name:</strong> Triggers ngOnChanges()</li>
           <li><strong>Click "Increment Counter":</strong> Triggers change detection hooks</li>
-          <li><strong>Toggle component:</strong> Triggers ngOnInit and ngOnDestroy</li>
+          <li><strong>Toggle "Destroy/Create Component":</strong> Triggers ngOnDestroy() and ngOnInit()</li>
         </ul>
       </div>
 
